@@ -41,21 +41,26 @@ $hotels = [
 ];
 
 $hasFilters = isset($_GET["parking"]) || isset($_GET["vote"]);
+$vote = $_GET["vote"] ?? '';
+/* $vote = isset($_GET["vote"]) ? $_GET["vote"] : ''; */
 
 if ($hasFilters) {
+
+/*     $parking = $_GET["parking"] === "si"; */
+    
     if ($_GET["parking"] === "si") {
-        $_GET["parking"] = true;
+        $parking = true;
     } elseif ($_GET["parking"] === "no") {
-        $_GET["parking"] = "false";
+        $parking = false;
     }
     
     $filteredHotels = false;
     foreach ($hotels as $hotel) {
         $mustPush = true;
-        if (isset($_GET["parking"]) && !str_contains(strtolower($hotel["parking"]), strtolower($_GET["parking"]))) {
+        if (isset($parking) && $parking !== $hotel["parking"]) {
             $mustPush = false;
         }
-        if (isset($_GET["vote"]) && $hotel["vote"] < $_GET["vote"]) {
+        if (isset($_GET["vote"]) && $hotel["vote"] < $vote) {
             $mustPush = false;
         }
         if ($mustPush) {
